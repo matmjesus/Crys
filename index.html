@@ -2,55 +2,220 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Crys</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Acesso Restrito</title>
     <style>
-        :root {
-            --bronze: #8e735b;
-            --creme: #fdf8f5;
-            --texto: #4a4a4a;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
+
         body {
-            margin: 0; padding: 0;
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh;
-            background-color: var(--creme);
-            font-family: 'Optima', 'Segoe UI', serif;
-            color: var(--texto);
+            background-color: #f8f9fa;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
+
         .container {
-            text-align: center; padding: 40px;
-            max-width: 500px; width: 85%;
-            background: #fff; border-radius: 2px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+            background: #ffffff;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 360px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
         }
-        h1 { font-weight: 300; letter-spacing: 3px; color: var(--bronze); font-size: 1.4rem; text-transform: uppercase; }
-        .linha { width: 40px; height: 1px; background: var(--bronze); margin: 20px auto; }
-        p { font-weight: 300; line-height: 1.6; margin-bottom: 30px; }
-        
-        .options { display: flex; flex-direction: column; gap: 10px; }
-        .btn {
-            background: none; border: 1px solid #e0e0e0;
-            color: var(--texto); padding: 15px;
-            font-size: 0.85rem; cursor: pointer;
-            transition: all 0.3s; text-align: left;
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .btn:hover { border-color: var(--bronze); background: #fafafa; }
-        .hidden { display: none; }
-        
-        #progress { font-size: 0.7rem; letter-spacing: 2px; color: #bbb; margin-bottom: 10px; text-transform: uppercase; }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #1a1a1a;
+            letter-spacing: -0.5px;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 18px;
+            border: 1px solid #e9ecef;
+            border-radius: 14px;
+            font-size: 18px;
+            text-align: center;
+            outline: none;
+            margin-bottom: 15px;
+            background-color: #fcfcfc;
+            transition: border-color 0.3s;
+        }
+
+        input[type="password"]:focus {
+            border-color: #000;
+        }
+
+        button {
+            width: 100%;
+            padding: 18px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .hint-toggle {
+            display: block;
+            margin-top: 25px;
+            font-size: 14px;
+            color: #adb5bd;
+            text-decoration: none;
+        }
+
+        #hint-text {
+            display: none;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #6c757d;
+            background: #f1f3f5;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        /* Tela de Mensagem */
+        #message-screen {
+            display: none;
+        }
+
+        .message-body {
+            font-size: 20px;
+            line-height: 1.6;
+            color: #1a1a1a;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        .timer-info {
+            font-size: 12px;
+            color: #adb5bd;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        #countdown {
+            font-size: 28px;
+            color: #ff3b30;
+            font-weight: 800;
+            display: block;
+            margin-top: 8px;
+        }
+
+        .blocked-msg {
+            color: #adb5bd;
+            font-size: 15px;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-       
-        function showFinal() {
-            document.getElementById('progress').classList.add('hidden');
-            document.getElementById('titulo').innerText =;
-            document.getElementById('texto').innerHTML = "Passando apenas para dizer: <b>Boa aula, Crys.</b><br><br>;
-            document.getElementById('options').innerHTML = '';
+    <div id="login-screen" class="container">
+        <h1>Oi, flor do dia!</h1>
+        
+        <div id="login-content">
+            <input type="password" id="password" inputmode="numeric" placeholder="Sua senha">
+            <button onclick="checkPassword()">Entrar</button>
+            <a href="#" class="hint-toggle" onclick="toggleHint()">Dica de senha</a>
+            <div id="hint-text">O dia do nosso primeiro beijo.</div>
+        </div>
+
+        <div id="block-message" style="display:none;" class="blocked-msg">
+            O acesso a esta mensagem expirou.<br>Até a próxima!
+        </div>
+    </div>
+
+    <div id="message-screen" class="container">
+        <div class="message-body">
+            Pego você hoje na faculdade.<br>
+            Avisa quando tiver saindo.<br>
+            Beijo.
+        </div>
+        <div class="timer-info">
+            Saindo em
+            <span id="countdown">8</span>
+        </div>
+    </div>
+
+    <script>
+        // Verifica se já foi lida ao abrir a página
+        window.onload = function() {
+            if (localStorage.getItem('msg_viewed_once') === 'true') {
+                showBlockedState();
+            }
+        };
+
+        function toggleHint() {
+            const hint = document.getElementById("hint-text");
+            hint.style.display = hint.style.display === "block" ? "none" : "block";
+        }
+
+        function checkPassword() {
+            const pass = document.getElementById("password").value;
+            
+            // Impede tentativa se já estiver bloqueado
+            if (localStorage.getItem('msg_viewed_once') === 'true') return;
+
+            if (pass === "24") {
+                startMessage();
+            } else {
+                alert("Senha incorreta");
+            }
+        }
+
+        function startMessage() {
+            document.getElementById("login-screen").style.display = "none";
+            document.getElementById("message-screen").style.display = "block";
+
+            let seconds = 8; // Tempo atualizado
+            const countdownElement = document.getElementById("countdown");
+
+            const timer = setInterval(() => {
+                seconds--;
+                countdownElement.innerText = seconds;
+
+                if (seconds <= 0) {
+                    clearInterval(timer);
+                    // Salva o bloqueio permanente no navegador
+                    localStorage.setItem('msg_viewed_once', 'true');
+                    showBlockedState();
+                }
+            }, 1000);
+        }
+
+        function showBlockedState() {
+            document.getElementById("message-screen").style.display = "none";
+            document.getElementById("login-screen").style.display = "block";
+            document.getElementById("login-content").style.display = "none";
+            document.getElementById("block-message").style.display = "block";
         }
     </script>
+
 </body>
 </html>
