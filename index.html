@@ -4,150 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Acesso Restrito</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: #f8f9fa;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: #ffffff;
-            padding: 40px 30px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
-            width: 100%;
-            max-width: 360px;
-            text-align: center;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h1 {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 30px;
-            color: #1a1a1a;
-            letter-spacing: -0.5px;
-        }
-
-        input[type="password"] {
-            width: 100%;
-            padding: 18px;
-            border: 1px solid #e9ecef;
-            border-radius: 14px;
-            font-size: 18px;
-            text-align: center;
-            outline: none;
-            margin-bottom: 15px;
-            background-color: #fcfcfc;
-            transition: border-color 0.3s;
-        }
-
-        input[type="password"]:focus {
-            border-color: #000;
-        }
-
-        button {
-            width: 100%;
-            padding: 18px;
-            background-color: #000;
-            color: #fff;
-            border: none;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        .hint-toggle {
-            display: block;
-            margin-top: 25px;
-            font-size: 14px;
-            color: #adb5bd;
-            text-decoration: none;
-        }
-
-        #hint-text {
-            display: none;
-            margin-top: 15px;
-            font-size: 14px;
-            color: #6c757d;
-            background: #f1f3f5;
-            padding: 12px;
-            border-radius: 10px;
-        }
-
-        /* Tela de Mensagem */
-        #message-screen {
-            display: none;
-        }
-
-        .message-body {
-            font-size: 20px;
-            line-height: 1.6;
-            color: #1a1a1a;
-            margin-bottom: 40px;
-            font-weight: 400;
-        }
-
-        .timer-info {
-            font-size: 12px;
-            color: #adb5bd;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }
-
-        #countdown {
-            font-size: 28px;
-            color: #ff3b30;
-            font-weight: 800;
-            display: block;
-            margin-top: 8px;
-        }
-
-        .blocked-msg {
-            color: #adb5bd;
-            font-size: 15px;
-            line-height: 1.5;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #f8f9fa; height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .container { background: #ffffff; padding: 40px 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05); width: 100%; max-width: 360px; text-align: center; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        h1 { font-size: 24px; font-weight: 600; margin-bottom: 30px; color: #1a1a1a; }
+        input[type="password"] { width: 100%; padding: 18px; border: 1px solid #e9ecef; border-radius: 14px; font-size: 18px; text-align: center; outline: none; margin-bottom: 15px; background-color: #fcfcfc; }
+        button { width: 100%; padding: 18px; background-color: #000; color: #fff; border: none; border-radius: 14px; font-size: 16px; font-weight: 600; cursor: pointer; }
+        .hint-toggle { display: block; margin-top: 25px; font-size: 14px; color: #adb5bd; text-decoration: none; }
+        #hint-text { display: none; margin-top: 15px; font-size: 14px; color: #6c757d; background: #f1f3f5; padding: 12px; border-radius: 10px; }
+        #message-screen { display: none; }
+        .message-body { font-size: 20px; line-height: 1.6; color: #1a1a1a; margin-bottom: 40px; }
+        .timer-info { font-size: 12px; color: #adb5bd; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; }
+        #countdown { font-size: 28px; color: #ff3b30; font-weight: 800; display: block; margin-top: 8px; }
+        .blocked-msg { color: #adb5bd; font-size: 15px; line-height: 1.5; }
     </style>
 </head>
 <body>
 
     <div id="login-screen" class="container">
         <h1>Oi, flor do dia!</h1>
-        
         <div id="login-content">
             <input type="password" id="password" inputmode="numeric" placeholder="Sua senha">
             <button onclick="checkPassword()">Entrar</button>
             <a href="#" class="hint-toggle" onclick="toggleHint()">Dica de senha</a>
             <div id="hint-text">O dia do nosso primeiro beijo.</div>
         </div>
-
         <div id="block-message" style="display:none;" class="blocked-msg">
-            O acesso a esta mensagem expirou.<br>Até a próxima!
+            O acesso a esta mensagem expirou definitivamente.
         </div>
     </div>
 
@@ -164,11 +53,29 @@
     </div>
 
     <script>
-        // Verifica se já foi lida ao abrir a página
+        // CONFIGURAÇÃO DO MARCOS (FIREBASE)
+        const firebaseConfig = {
+            apiKey: "AIzaSyBPi_yNsavFA634885vgTYaOvnas0CJYh0",
+            authDomain: "mensagem-secreta-9a559.firebaseapp.com",
+            databaseURL: "https://mensagem-secreta-9a559-default-rtdb.firebaseio.com",
+            projectId: "mensagem-secreta-9a559",
+            storageBucket: "mensagem-secreta-9a559.firebasestorage.app",
+            messagingSenderId: "158628107633",
+            appId: "1:158628107633:web:e6fbf9cdcc34cf053a92d0"
+        };
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Checar status ao carregar
         window.onload = function() {
-            if (localStorage.getItem('msg_viewed_once') === 'true') {
-                showBlockedState();
-            }
+            database.ref('status/foi_lida').on('value', (snapshot) => {
+                if (snapshot.val() === true) {
+                    document.getElementById("login-content").style.display = "none";
+                    document.getElementById("block-message").style.display = "block";
+                }
+            });
         };
 
         function toggleHint() {
@@ -178,10 +85,6 @@
 
         function checkPassword() {
             const pass = document.getElementById("password").value;
-            
-            // Impede tentativa se já estiver bloqueado
-            if (localStorage.getItem('msg_viewed_once') === 'true') return;
-
             if (pass === "24") {
                 startMessage();
             } else {
@@ -193,7 +96,7 @@
             document.getElementById("login-screen").style.display = "none";
             document.getElementById("message-screen").style.display = "block";
 
-            let seconds = 8; // Tempo atualizado
+            let seconds = 8;
             const countdownElement = document.getElementById("countdown");
 
             const timer = setInterval(() => {
@@ -202,20 +105,13 @@
 
                 if (seconds <= 0) {
                     clearInterval(timer);
-                    // Salva o bloqueio permanente no navegador
-                    localStorage.setItem('msg_viewed_once', 'true');
-                    showBlockedState();
+                    // GRAVA NO FIREBASE QUE JÁ FOI LIDA
+                    database.ref('status').set({ foi_lida: true }).then(() => {
+                        location.reload();
+                    });
                 }
             }, 1000);
         }
-
-        function showBlockedState() {
-            document.getElementById("message-screen").style.display = "none";
-            document.getElementById("login-screen").style.display = "block";
-            document.getElementById("login-content").style.display = "none";
-            document.getElementById("block-message").style.display = "block";
-        }
     </script>
-
 </body>
 </html>
