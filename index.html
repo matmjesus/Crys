@@ -2,115 +2,270 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Acesso Restrito</title>
-    
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Integrado Master 2026</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: #f8f9fa; height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .container { background: #ffffff; padding: 40px 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05); width: 100%; max-width: 360px; text-align: center; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        h1 { font-size: 24px; font-weight: 600; margin-bottom: 30px; color: #1a1a1a; }
-        input[type="password"] { width: 100%; padding: 18px; border: 1px solid #e9ecef; border-radius: 14px; font-size: 18px; text-align: center; outline: none; margin-bottom: 15px; background-color: #fcfcfc; }
-        button { width: 100%; padding: 18px; background-color: #000; color: #fff; border: none; border-radius: 14px; font-size: 16px; font-weight: 600; cursor: pointer; }
-        .hint-toggle { display: block; margin-top: 25px; font-size: 14px; color: #adb5bd; text-decoration: none; }
-        #hint-text { display: none; margin-top: 15px; font-size: 14px; color: #6c757d; background: #f1f3f5; padding: 12px; border-radius: 10px; }
-        #message-screen { display: none; }
-        .message-body { font-size: 20px; line-height: 1.6; color: #1a1a1a; margin-bottom: 40px; }
-        .timer-info { font-size: 12px; color: #adb5bd; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; }
-        #countdown { font-size: 28px; color: #ff3b30; font-weight: 800; display: block; margin-top: 8px; }
-        .blocked-msg { color: #adb5bd; font-size: 15px; line-height: 1.5; }
+        :root {
+            --primary: #00acee;
+            --purple: #605ca8;
+            --secondary: #00c292;
+            --orange: #f39c12;
+            --danger: #ef4444;
+            --bg: #f4f7f6;
+            --white: #ffffff;
+            --border: #e2e8f0;
+            --text: #2c3e50;
+        }
+
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; }
+
+        /* --- NAVEGAÇÃO --- */
+        .container { max-width: 1200px; margin: 0 auto; display: none; padding-bottom: 80px; }
+        .active-view { display: block; animation: fadeIn 0.3s ease; }
+        
+        #splash { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 90vh; gap: 15px; }
+        .nav-btn { width: 90%; max-width: 300px; padding: 20px; border: none; border-radius: 15px; color: white; font-weight: 800; cursor: pointer; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+        /* --- BARRA DE MESES --- */
+        .header-months { display: flex; gap: 8px; overflow-x: auto; padding: 10px 5px; background: white; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .month-btn { flex: 0 0 auto; padding: 10px 18px; border: none; border-radius: 8px; background: #f1f5f9; font-weight: 700; color: #64748b; font-size: 0.8rem; cursor: pointer; }
+        .month-btn.active { background: var(--orange); color: white; }
+
+        /* --- FORMULÁRIOS REVISADOS --- */
+        .card { background: var(--white); border-radius: 20px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); margin-bottom: 20px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; align-items: end; background: #f8fafc; padding: 15px; border-radius: 15px; }
+        
+        .input-group { display: flex; flex-direction: column; gap: 5px; }
+        label { font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase; padding-left: 2px; }
+        input, select { height: 45px; padding: 0 12px; border: 2px solid var(--border); border-radius: 10px; font-size: 0.9rem; width: 100%; box-sizing: border-box; background: white; }
+        
+        .btn-add { height: 45px; background: var(--secondary); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+
+        /* --- LAYOUT DASHBOARD --- */
+        .dashboard-layout { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        
+        @media (min-width: 992px) {
+            .dashboard-layout { grid-template-columns: 2fr 1fr; }
+            .form-grid-agenda { grid-template-columns: 0.6fr 0.6fr 1.5fr 1fr 1.5fr 0.6fr auto; }
+        }
+
+        /* --- CARDS DE AGENDA --- */
+        .card-appointment { border-left: 6px solid var(--primary); padding: 15px; margin-top: 12px; position: relative; }
+        .app-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .app-time { font-weight: 800; color: var(--primary); font-size: 0.9rem; }
+        .app-price { font-weight: 800; color: var(--secondary); font-size: 1.1rem; }
+        .app-info b { font-size: 1.05rem; color: var(--text); display: block; margin-bottom: 4px; }
+        .app-info span { font-size: 0.8rem; color: #64748b; margin-right: 12px; }
+        
+        .actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 15px; border-top: 1px solid #f1f5f9; padding-top: 12px; }
+        .btn-opt { padding: 10px; border: none; border-radius: 8px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; cursor: pointer; }
+        .btn-edit { background: #fff3e0; color: #f39c12; }
+        .btn-del { background: #ffebee; color: #ef4444; }
+        .btn-fin { background: var(--secondary); color: white; }
+
+        /* --- TABELAS --- */
+        .table-container { overflow-x: auto; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; min-width: 500px; }
+        th { text-align: left; padding: 12px; font-size: 0.75rem; color: #94a3b8; border-bottom: 1px solid #eee; text-transform: uppercase; }
+        td { padding: 12px; border-bottom: 1px solid #f8fafc; font-size: 0.9rem; }
+
+        /* --- RODAPÉ FIXO --- */
+        .btn-back-footer { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #334155; color: white; border: none; padding: 12px 25px; border-radius: 30px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 100; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <div id="login-screen" class="container">
-        <h1>Oi!</h1>
-        <div id="login-content">
-            <input type="password" id="password" inputmode="numeric" placeholder="Sua senha">
-            <button onclick="checkPassword()">Entrar</button>
-            <a href="#" class="hint-toggle" onclick="toggleHint()">Dica de senha</a>
-            <div id="hint-text">O dia do nosso primeiro beijo.</div>
-        </div>
-        <div id="block-message" style="display:none;" class="blocked-msg">
-            O acesso a esta mensagem expirou definitivamente.
+    <div id="splash">
+        <h1 style="font-weight: 900; margin-bottom: 5px;">SALAO & CASA</h1>
+        <p style="color: #64748b; margin-bottom: 30px;">Controle Financeiro Integrado</p>
+        <button class="nav-btn" style="background: var(--purple)" onclick="openApp('casa')">🏠 CONTROLE DE CASA</button>
+        <button class="nav-btn" style="background: var(--primary)" onclick="openApp('salao')">✂️ CONTROLE DO SALÃO</button>
+        <button class="nav-btn" style="background: var(--orange)" onclick="openApp('agenda')">📅 AGENDA DE HORÁRIOS</button>
+    </div>
+
+    <div id="nav-header" style="display:none">
+        <div class="header-months" id="month-list"></div>
+    </div>
+
+    <div id="view-casa" class="container">
+        <div class="dashboard-layout">
+            <div class="card">
+                <h2 id="title-casa" style="color: var(--purple)">Janeiro - Casa</h2>
+                <div class="form-grid">
+                    <div class="input-group"><label>Descrição</label><input type="text" id="casa-desc" placeholder="Ex: Internet"></div>
+                    <div class="input-group"><label>Valor</label><input type="number" id="casa-val" placeholder="0,00"></div>
+                    <button class="btn-add" onclick="addData('casa')">Adicionar</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Descrição</th><th>Valor</th><th>Ações</th></tr></thead>
+                        <tbody id="table-casa"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card" style="border-top: 6px solid var(--secondary)">
+                <h3>Recebimentos</h3>
+                <div class="input-group" style="margin-bottom:15px"><label>ESTADO DA BAHIA</label><input type="text" placeholder="R$ 0,00"></div>
+                <div class="input-group"><label>L.E.M.</label><input type="text" placeholder="R$ 0,00"></div>
+                <div style="text-align: right; margin-top: 30px;">
+                    <label>Saldo Total</label>
+                    <div style="font-size: 2rem; font-weight: 900; color: var(--secondary);">R$ 0,00</div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="message-screen" class="container">
-        <div class="message-body">
-            Nega: Como você está?.<br>
-            To testanto umas mensagens de visualização única<br>
-            Não sou whatsapp más gosto de ficar querendo entender.
-        </div>
-        <div class="timer-info">
-            Saindo em
-            <span id="countdown">8</span>
+    <div id="view-salao" class="container">
+        <div class="dashboard-layout">
+            <div class="card">
+                <h2 id="title-salao" style="color: var(--primary)">Janeiro - Salão</h2>
+                <div class="form-grid">
+                    <div class="input-group" style="grid-column: span 2;"><label>Descrição</label><input type="text" id="salao-desc" placeholder="Serviço ou Produto"></div>
+                    <div class="input-group">
+                        <label>Tipo</label>
+                        <select id="salao-tipo"><option value="entrada">Entrada (+)</option><option value="saida">Saída (-)</option></select>
+                    </div>
+                    <div class="input-group"><label>Valor</label><input type="number" id="salao-val" placeholder="0,00"></div>
+                    <button class="btn-add" style="background: var(--primary)" onclick="addData('salao')">Lançar</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Tipo</th><th>Descrição</th><th>Valor</th><th>Ação</th></tr></thead>
+                        <tbody id="table-salao"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card" style="border-top: 6px solid var(--primary)">
+                <h3>Resumo Salão</h3>
+                <label>Total Entradas</label><div style="font-size: 1.4rem; font-weight: 800; color: var(--secondary); margin-bottom: 15px;">R$ 0,00</div>
+                <label>Total Saídas</label><div style="font-size: 1.4rem; font-weight: 800; color: var(--danger);">R$ 0,00</div>
+            </div>
         </div>
     </div>
+
+    <div id="view-agenda" class="container">
+        <div class="card">
+            <h2 id="title-agenda" style="color: var(--orange)">Janeiro - Agenda</h2>
+            <div class="form-grid form-grid-agenda">
+                <div class="input-group"><label>Início</label><input type="time" id="ag-in"></div>
+                <div class="input-group"><label>Fim</label><input type="time" id="ag-fim"></div>
+                <div class="input-group"><label>Cliente</label><input type="text" id="ag-nome" placeholder="Nome"></div>
+                <div class="input-group"><label>Tel</label><input type="tel" id="ag-tel" placeholder="(00) 00000-0000"></div>
+                <div class="input-group"><label>Serviço</label><input type="text" id="ag-proc" placeholder="Procedimento"></div>
+                <div class="input-group"><label>Valor</label><input type="number" id="ag-val" placeholder="0,00"></div>
+                <button class="btn-add" style="background: var(--orange)" onclick="addData('agenda')">Agendar</button>
+            </div>
+        </div>
+        <div id="list-agenda"></div>
+    </div>
+
+    <button id="btn-back" class="btn-back-footer" style="display:none" onclick="goHome()">← MENU PRINCIPAL</button>
 
     <script>
-        // CONFIGURAÇÃO DO MARCOS (FIREBASE)
-        const firebaseConfig = {
-            apiKey: "AIzaSyBPi_yNsavFA634885vgTYaOvnas0CJYh0",
-            authDomain: "mensagem-secreta-9a559.firebaseapp.com",
-            databaseURL: "https://mensagem-secreta-9a559-default-rtdb.firebaseio.com",
-            projectId: "mensagem-secreta-9a559",
-            storageBucket: "mensagem-secreta-9a559.firebasestorage.app",
-            messagingSenderId: "158628107633",
-            appId: "1:158628107633:web:e6fbf9cdcc34cf053a92d0"
-        };
+        const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+        let mesAtual = "Janeiro";
+        let viewAtual = "";
 
-        // Inicializar Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        // Inicializar botões de meses
+        const mList = document.getElementById('month-list');
+        meses.forEach(m => {
+            const btn = document.createElement('button');
+            btn.className = `month-btn ${m === mesAtual ? 'active' : ''}`;
+            btn.innerText = m;
+            btn.onclick = () => switchMonth(m);
+            mList.appendChild(btn);
+        });
 
-        // Checar status ao carregar
-        window.onload = function() {
-            database.ref('status/foi_lida').on('value', (snapshot) => {
-                if (snapshot.val() === true) {
-                    document.getElementById("login-content").style.display = "none";
-                    document.getElementById("block-message").style.display = "block";
-                }
-            });
-        };
-
-        function toggleHint() {
-            const hint = document.getElementById("hint-text");
-            hint.style.display = hint.style.display === "block" ? "none" : "block";
+        function switchMonth(m) {
+            mesAtual = m;
+            document.querySelectorAll('.month-btn').forEach(b => b.classList.toggle('active', b.innerText === m));
+            updateUI();
         }
 
-        function checkPassword() {
-            const pass = document.getElementById("password").value;
-            if (pass === "24") {
-                startMessage();
-            } else {
-                alert("Senha incorreta");
+        function openApp(id) {
+            viewAtual = id;
+            document.getElementById('splash').style.display = 'none';
+            document.getElementById('nav-header').style.display = 'block';
+            document.getElementById('btn-back').style.display = 'block';
+            document.querySelectorAll('.container').forEach(c => c.classList.remove('active-view'));
+            document.getElementById('view-' + id).classList.add('active-view');
+            updateUI();
+        }
+
+        function goHome() {
+            document.getElementById('splash').style.display = 'flex';
+            document.getElementById('nav-header').style.display = 'none';
+            document.getElementById('btn-back').style.display = 'none';
+            document.querySelectorAll('.container').forEach(c => c.classList.remove('active-view'));
+        }
+
+        function updateUI() {
+            document.getElementById('title-casa').innerText = `${mesAtual} - Casa`;
+            document.getElementById('title-salao').innerText = `${mesAtual} - Salão`;
+            document.getElementById('title-agenda').innerText = `${mesAtual} - Agenda`;
+            renderData();
+        }
+
+        // LÓGICA DE DADOS (LOCALSTORAGE)
+        function addData(type) {
+            const db = JSON.parse(localStorage.getItem('gestao_master_2026') || '{}');
+            if (!db[mesAtual]) db[mesAtual] = { casa: [], salao: [], agenda: [] };
+
+            let item = {};
+            if (type === 'casa') {
+                item = { desc: document.getElementById('casa-desc').value, val: document.getElementById('casa-val').value };
+                db[mesAtual].casa.push(item);
+            } else if (type === 'salao') {
+                item = { desc: document.getElementById('salao-desc').value, val: document.getElementById('salao-val').value, tipo: document.getElementById('salao-tipo').value };
+                db[mesAtual].salao.push(item);
+            } else if (type === 'agenda') {
+                item = { in: document.getElementById('ag-in').value, fim: document.getElementById('ag-fim').value, nome: document.getElementById('ag-nome').value, tel: document.getElementById('ag-tel').value, proc: document.getElementById('ag-proc').value, val: document.getElementById('ag-val').value };
+                db[mesAtual].agenda.push(item);
             }
+
+            localStorage.setItem('gestao_master_2026', JSON.stringify(db));
+            renderData();
+            document.querySelectorAll('input').forEach(i => i.value = '');
         }
 
-        function startMessage() {
-            document.getElementById("login-screen").style.display = "none";
-            document.getElementById("message-screen").style.display = "block";
+        function renderData() {
+            const db = JSON.parse(localStorage.getItem('gestao_master_2026') || '{}');
+            const data = db[mesAtual] || { casa: [], salao: [], agenda: [] };
 
-            let seconds = 8;
-            const countdownElement = document.getElementById("countdown");
+            document.getElementById('table-casa').innerHTML = data.casa.map((item, i) => `
+                <tr><td>${item.desc}</td><td>R$ ${parseFloat(item.val).toFixed(2)}</td><td><button onclick="del('casa',${i})" style="border:none; background:none; cursor:pointer">❌</button></td></tr>
+            `).join('');
 
-            const timer = setInterval(() => {
-                seconds--;
-                countdownElement.innerText = seconds;
+            document.getElementById('table-salao').innerHTML = data.salao.map((item, i) => `
+                <tr><td><small>${item.tipo.toUpperCase()}</small></td><td>${item.desc}</td><td>R$ ${parseFloat(item.val).toFixed(2)}</td><td><button onclick="del('salao',${i})" style="border:none; background:none; cursor:pointer">❌</button></td></tr>
+            `).join('');
 
-                if (seconds <= 0) {
-                    clearInterval(timer);
-                    // GRAVA NO FIREBASE QUE JÁ FOI LIDA
-                    database.ref('status').set({ foi_lida: true }).then(() => {
-                        location.reload();
-                    });
-                }
-            }, 1000);
+            document.getElementById('list-agenda').innerHTML = data.agenda.map((item, i) => `
+                <div class="card card-appointment">
+                    <div class="app-header">
+                        <span class="app-time">${item.in} - ${item.fim}</span>
+                        <span class="app-price">R$ ${parseFloat(item.val).toFixed(2)}</span>
+                    </div>
+                    <div class="app-info">
+                        <b>${item.nome}</b>
+                        <span>📞 ${item.tel}</span> <span>✨ ${item.proc}</span>
+                    </div>
+                    <div class="actions">
+                        <button class="btn-opt btn-edit">Editar</button>
+                        <button class="btn-opt btn-del" onclick="del('agenda',${i})">Excluir</button>
+                        <button class="btn-opt btn-fin" onclick="this.innerText='CONCLUÍDO'; this.style.background='#ccc'">Finalizar</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function del(type, index) {
+            const db = JSON.parse(localStorage.getItem('gestao_master_2026'));
+            db[mesAtual][type].splice(index, 1);
+            localStorage.setItem('gestao_master_2026', JSON.stringify(db));
+            renderData();
         }
     </script>
 </body>
