@@ -1,272 +1,355 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Integrado Master 2026</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mente Blindada - Blocos de Reconstrução</title>
     <style>
-        :root {
-            --primary: #00acee;
-            --purple: #605ca8;
-            --secondary: #00c292;
-            --orange: #f39c12;
-            --danger: #ef4444;
-            --bg: #f4f7f6;
-            --white: #ffffff;
-            --border: #e2e8f0;
-            --text: #2c3e50;
-        }
-
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; }
-
-        /* --- NAVEGAÇÃO --- */
-        .container { max-width: 1200px; margin: 0 auto; display: none; padding-bottom: 80px; }
-        .active-view { display: block; animation: fadeIn 0.3s ease; }
-        
-        #splash { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 90vh; gap: 15px; }
-        .nav-btn { width: 90%; max-width: 300px; padding: 20px; border: none; border-radius: 15px; color: white; font-weight: 800; cursor: pointer; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-
-        /* --- BARRA DE MESES --- */
-        .header-months { display: flex; gap: 8px; overflow-x: auto; padding: 10px 5px; background: white; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .month-btn { flex: 0 0 auto; padding: 10px 18px; border: none; border-radius: 8px; background: #f1f5f9; font-weight: 700; color: #64748b; font-size: 0.8rem; cursor: pointer; }
-        .month-btn.active { background: var(--orange); color: white; }
-
-        /* --- FORMULÁRIOS REVISADOS --- */
-        .card { background: var(--white); border-radius: 20px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); margin-bottom: 20px; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; align-items: end; background: #f8fafc; padding: 15px; border-radius: 15px; }
-        
-        .input-group { display: flex; flex-direction: column; gap: 5px; }
-        label { font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase; padding-left: 2px; }
-        input, select { height: 45px; padding: 0 12px; border: 2px solid var(--border); border-radius: 10px; font-size: 0.9rem; width: 100%; box-sizing: border-box; background: white; }
-        
-        .btn-add { height: 45px; background: var(--secondary); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
-
-        /* --- LAYOUT DASHBOARD --- */
-        .dashboard-layout { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        
-        @media (min-width: 992px) {
-            .dashboard-layout { grid-template-columns: 2fr 1fr; }
-            .form-grid-agenda { grid-template-columns: 0.6fr 0.6fr 1.5fr 1fr 1.5fr 0.6fr auto; }
-        }
-
-        /* --- CARDS DE AGENDA --- */
-        .card-appointment { border-left: 6px solid var(--primary); padding: 15px; margin-top: 12px; position: relative; }
-        .app-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-        .app-time { font-weight: 800; color: var(--primary); font-size: 0.9rem; }
-        .app-price { font-weight: 800; color: var(--secondary); font-size: 1.1rem; }
-        .app-info b { font-size: 1.05rem; color: var(--text); display: block; margin-bottom: 4px; }
-        .app-info span { font-size: 0.8rem; color: #64748b; margin-right: 12px; }
-        
-        .actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 15px; border-top: 1px solid #f1f5f9; padding-top: 12px; }
-        .btn-opt { padding: 10px; border: none; border-radius: 8px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; cursor: pointer; }
-        .btn-edit { background: #fff3e0; color: #f39c12; }
-        .btn-del { background: #ffebee; color: #ef4444; }
-        .btn-fin { background: var(--secondary); color: white; }
-
-        /* --- TABELAS --- */
-        .table-container { overflow-x: auto; margin-top: 20px; }
-        table { width: 100%; border-collapse: collapse; min-width: 500px; }
-        th { text-align: left; padding: 12px; font-size: 0.75rem; color: #94a3b8; border-bottom: 1px solid #eee; text-transform: uppercase; }
-        td { padding: 12px; border-bottom: 1px solid #f8fafc; font-size: 0.9rem; }
-
-        /* --- RODAPÉ FIXO --- */
-        .btn-back-footer { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #334155; color: white; border: none; padding: 12px 25px; border-radius: 30px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 100; }
-
+        :root { --p: #1e293b; --pl: #334155; --a: #0f766e; --bg: #f8fafc; --cbg: #ffffff; --t: #0f172a; --m: #64748b; --b: #e2e8f0; --s: #15803d; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--t); padding-bottom: 80px; }
+        header { background: var(--p); color: #fff; padding: 20px 16px; text-align: center; border-bottom: 4px solid var(--a); }
+        header h1 { font-size: 1.3rem; } header p { font-size: 0.85rem; color: #94a3b8; }
+        .container { max-width: 500px; margin: 0 auto; padding: 16px; }
+        .nav-bottom { position: fixed; bottom: 0; width: 100%; height: 65px; background: var(--p); display: flex; z-index: 1000; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #94a3b8; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
+        .nav-item.active { color: #fff; background: var(--pl); border-top: 3px solid var(--a); }
+        .nav-icon { font-size: 1.2rem; margin-bottom: 4px; }
+        .view { display: none; animation: fadeIn 0.3s; } .view.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Grid de Blocos */
+        .grid-blocks { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+        .btn-block { background: var(--cbg); border: 2px solid var(--b); border-radius: 12px; padding: 16px 10px; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .btn-block.done { border-color: var(--s); background: #f0fdf4; }
+        .btn-block.active-block { border-color: var(--a); background: #f0fdfa; }
+        .blk-title { font-weight: bold; color: var(--p); font-size: 1.1rem; margin-bottom: 5px; }
+        .blk-prog { font-size: 0.8rem; color: var(--m); font-weight: 600; }
+        .btn-block.done .blk-prog { color: var(--s); }
+
+        /* Cartões de Perguntas */
+        .card { background: var(--cbg); border-radius: 12px; padding: 16px; border: 1px solid var(--b); margin-bottom: 16px; }
+        .cat-tag { display: inline-block; background: #f1f5f9; color: var(--pl); font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; margin-bottom: 15px; text-transform: uppercase; }
+        .q-text { font-size: 1.05rem; font-weight: 600; margin-bottom: 20px; line-height: 1.4; }
+        .btn-op { display: block; width: 100%; background: var(--bg); border: 2px solid var(--b); border-radius: 8px; padding: 14px; text-align: left; font-size: 0.95rem; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
+        .btn-op.sel { background: #f0fdf4; border-color: var(--s); color: var(--s); font-weight: bold; }
+        .btn-action { width: 100%; background: var(--a); color: #fff; border: none; border-radius: 8px; padding: 16px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 10px; }
+        
+        /* Stats */
+        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .stat-box { background: var(--cbg); padding: 15px; text-align: center; border-radius: 8px; border: 1px solid var(--b); }
+        .stat-val { font-size: 1.8rem; font-weight: bold; color: var(--a); }
     </style>
 </head>
 <body>
+    <header>
+        <h1>Mente Blindada</h1>
+        <p>Um tijolo de cada vez.</p>
+    </header>
 
-    <div id="splash">
-        <h1 style="font-weight: 900; margin-bottom: 5px;">SPAÇO DA BELEZA</h1>
-        <p style="color: #64748b; margin-bottom: 30px;">Controle Financeiro Integrado</p>
-        <button class="nav-btn" style="background: var(--purple)" onclick="openApp('casa')">CONTROLE DE CASA</button>
-        <button class="nav-btn" style="background: var(--primary)" onclick="openApp('salao')">CONTROLE DO SALÃO</button>
-        <button class="nav-btn" style="background: var(--orange)" onclick="openApp('agenda')">AGENDA DE HORÁRIOS</button>
-    </div>
+    <div class="container">
+        <div id="view-home" class="view active">
+            <h2 style="font-size: 1.2rem; margin-bottom: 5px; color: var(--p);">Jornada de Reconstrução</h2>
+            <p style="font-size: 0.85rem; color: var(--m);">Selecione um bloco para responder 5 questões. Siga no seu ritmo.</p>
+            <div class="grid-blocks" id="blocks-container"></div>
+        </div>
 
-    <div id="nav-header" style="display:none">
-        <div class="header-months" id="month-list"></div>
-    </div>
-
-    <div id="view-casa" class="container">
-        <div class="dashboard-layout">
-            <div class="card">
-                <h2 id="title-casa" style="color: var(--purple)">Janeiro - Casa</h2>
-                <div class="form-grid">
-                    <div class="input-group"><label>Descrição</label><input type="text" id="casa-desc" placeholder="Ex: Internet"></div>
-                    <div class="input-group"><label>Valor</label><input type="number" id="casa-val" placeholder="0,00"></div>
-                    <button class="btn-add" onclick="addData('casa')">Adicionar</button>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead><tr><th>Descrição</th><th>Valor</th><th>Ações</th></tr></thead>
-                        <tbody id="table-casa"></tbody>
-                    </table>
+        <div id="view-runner" class="view">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <button onclick="tab('home')" style="background: none; border: none; color: var(--m); font-weight: bold; font-size: 0.9rem; cursor: pointer;">← Voltar</button>
+                <div style="font-size: 0.85rem; font-weight: bold; color: var(--p);">
+                    <span id="run-title">Bloco X</span> • <span id="run-count">1/5</span>
                 </div>
             </div>
-            <div class="card" style="border-top: 6px solid var(--secondary)">
-                <h3>Recebimentos</h3>
-                <div class="input-group" style="margin-bottom:15px"><label>ESTADO DA BAHIA</label><input type="text" placeholder="R$ 0,00"></div>
-                <div class="input-group"><label>L.E.M.</label><input type="text" placeholder="R$ 0,00"></div>
-                <div style="text-align: right; margin-top: 30px;">
-                    <label>Saldo Total</label>
-                    <div style="font-size: 2rem; font-weight: 900; color: var(--secondary);">R$ 0,00</div>
-                </div>
+            
+            <div style="background: var(--b); height: 8px; border-radius: 4px; margin-bottom: 20px;">
+                <div id="run-prog" style="height: 100%; background: var(--a); width: 0%; transition: width 0.3s ease; border-radius: 4px;"></div>
+            </div>
+            
+            <div id="run-container"></div>
+            
+            <button class="btn-action" id="btn-next" style="display:none;" onclick="nextQuestion()">Confirmar Resposta</button>
+            <button class="btn-action" id="btn-finish" style="background: var(--p); display:none;" onclick="tab('home')">Voltar aos Blocos</button>
+        </div>
+
+        <div id="view-progress" class="view">
+            <h2 style="font-size: 1.2rem; margin-bottom: 15px; color: var(--p);">Meu Painel</h2>
+            <div class="stats">
+                <div class="stat-box"><div class="stat-val" id="st-tot">0</div><div style="font-size:0.75rem; color:var(--m); text-transform: uppercase; font-weight: bold; margin-top: 5px;">Reflexões</div></div>
+                <div class="stat-box"><div class="stat-val" id="st-pct">0%</div><div style="font-size:0.75rem; color:var(--m); text-transform: uppercase; font-weight: bold; margin-top: 5px;">Conclusão</div></div>
+            </div>
+            <div class="card" style="border-left: 4px solid #dc2626;">
+                <h3 style="font-size: 1rem; color: var(--p); margin-bottom:10px;">Compromisso de Honra</h3>
+                <p style="font-size: 0.85rem; color: var(--m); margin-bottom: 15px; line-height: 1.5;">Este aplicativo é um pacto consigo mesmo. Suas respostas definem a clareza do homem que você verá no espelho amanhã.</p>
+                <button class="btn-action" style="background: #dc2626;" onclick="resetAll()">Zerar Progresso</button>
             </div>
         </div>
     </div>
 
-    <div id="view-salao" class="container">
-        <div class="dashboard-layout">
-            <div class="card">
-                <h2 id="title-salao" style="color: var(--primary)">Janeiro - Salão</h2>
-                <div class="form-grid">
-                    <div class="input-group" style="grid-column: span 2;"><label>Descrição</label><input type="text" id="salao-desc" placeholder="Serviço ou Produto"></div>
-                    <div class="input-group">
-                        <label>Tipo</label>
-                        <select id="salao-tipo"><option value="entrada">Entrada (+)</option><option value="saida">Saída (-)</option></select>
-                    </div>
-                    <div class="input-group"><label>Valor</label><input type="number" id="salao-val" placeholder="0,00"></div>
-                    <button class="btn-add" style="background: var(--primary)" onclick="addData('salao')">Lançar</button>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead><tr><th>Tipo</th><th>Descrição</th><th>Valor</th><th>Ação</th></tr></thead>
-                        <tbody id="table-salao"></tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="card" style="border-top: 6px solid var(--primary)">
-                <h3>Resumo Salão</h3>
-                <label>Total Entradas</label><div style="font-size: 1.4rem; font-weight: 800; color: var(--secondary); margin-bottom: 15px;">R$ 0,00</div>
-                <label>Total Saídas</label><div style="font-size: 1.4rem; font-weight: 800; color: var(--danger);">R$ 0,00</div>
-            </div>
-        </div>
-    </div>
-
-    <div id="view-agenda" class="container">
-        <div class="card">
-            <h2 id="title-agenda" style="color: var(--orange)">Janeiro - Agenda</h2>
-            <div class="form-grid form-grid-agenda">
-                <div class="input-group"><label>Início</label><input type="time" id="ag-in"></div>
-                <div class="input-group"><label>Fim</label><input type="time" id="ag-fim"></div>
-                <div class="input-group"><label>Cliente</label><input type="text" id="ag-nome" placeholder="Nome"></div>
-                <div class="input-group"><label>Tel</label><input type="tel" id="ag-tel" placeholder="(00) 00000-0000"></div>
-                <div class="input-group"><label>Serviço</label><input type="text" id="ag-proc" placeholder="Procedimento"></div>
-                <div class="input-group"><label>Valor</label><input type="number" id="ag-val" placeholder="0,00"></div>
-                <button class="btn-add" style="background: var(--orange)" onclick="addData('agenda')">Agendar</button>
-            </div>
-        </div>
-        <div id="list-agenda"></div>
-    </div>
-
-    <button id="btn-back" class="btn-back-footer" style="display:none" onclick="goHome()">← MENU PRINCIPAL</button>
+    <nav class="nav-bottom">
+        <div class="nav-item active" id="nav-home" onclick="tab('home')"><span class="nav-icon">🗺️</span> Blocos</div>
+        <div class="nav-item" id="nav-progress" onclick="tab('progress')"><span class="nav-icon">📊</span> Evolução</div>
+    </nav>
 
     <script>
-        const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-        let mesAtual = "Janeiro";
-        let viewAtual = "";
+        const qs = [
+            // Bloco 1 (0-4)
+            {c:"O Passado",q:"Olhar os SMS bloqueados me aproxima do meu futuro ou me acorrenta a um passado insustentável?",a:"Me acorrenta a uma ilusão que drena minha energia.",b:"É apenas curiosidade inofensiva."},
+            {c:"O Passado",q:"O 'te amo' monossilábico dela propõe resolver as diferenças ou é só uma isca para o ego dela?",a:"É uma isca. Não há intenção de me ouvir ou respeitar.",b:"É prova de que devemos voltar."},
+            {c:"O Passado",q:"O que custa mais caro: o dinheiro que não tenho para as viagens ou a saúde mental que perco tentando caber no mundo dela?",a:"Minha paz de espírito não tem preço.",b:"Posso tentar me endividar para acompanhar."},
+            {c:"O Passado",q:"Sinto falta do amor genuíno, ou sinto saudade do conforto daquele padrão de vida?",a:"A falta de diálogo mostra que faltava parceria real.",b:"Apenas sinto falta dela."},
+            {c:"O Passado",q:"Se voltássemos, como eu me sentiria nas rodas de amigos dela, sabendo da disparidade?",a:"Silenciado, pois ela se nega a falar sobre o assunto.",b:"Ficaria confortável fingindo."},
+            // Bloco 2 (5-9)
+            {c:"O Passado",q:"Manter o bloqueio há 5 meses é fraqueza ou o maior ato de respeito próprio que já tive?",a:"É minha maior força. Mostra que sei meu limite.",b:"É puro orgulho bobo."},
+            {c:"O Passado",q:"Estou esperando um milagre onde ela passe a respeitar meu trabalho, ou lidando com os fatos?",a:"Os fatos provam que ela minimiza meus sentimentos.",b:"Ainda espero um milagre."},
+            {c:"O Passado",q:"Sentir que estou 'traindo' ela ao seguir em frente faz sentido?",a:"Não. É uma lealdade tóxica a um ciclo encerrado.",b:"Sim, devo exclusividade a um fantasma."},
+            {c:"O Passado",q:"Essa vontade súbita de ceder vem de um amor maduro ou puramente da carência?",a:"Vem da carência natural de quem está sozinho.",b:"Vem de um destino inevitável."},
+            {c:"O Passado",q:"Meu valor como homem depende da validação de uma mulher que ganha 20x mais que eu?",a:"Não. Meu valor vem do meu caráter e esforço.",b:"Sim, me sinto menos homem."},
+            // Bloco 3 (10-14)
+            {c:"O Passado",q:"As atitudes dela, ignorando minhas preocupações financeiras, demonstram parceria?",a:"Não, demonstram egoísmo e conveniência.",b:"Demonstram que ela é otimista."},
+            {c:"O Passado",q:"O silêncio dela diante da minha dor ao longo da relação foi um acidente ou um padrão?",a:"Foi um padrão de quem não queria lidar com o mundo real.",b:"Foi apenas falta de jeito."},
+            {c:"O Passado",q:"A euforia do começo de uma possível volta duraria quanto tempo até os velhos problemas retornarem?",a:"Duraria dias, até a próxima viagem ou cobrança.",b:"Duraria para sempre desta vez."},
+            {c:"O Passado",q:"Ter a aba de SMS bloqueados visível é um auto-sabotagem ativa?",a:"Sim, é deixar a porta encostada para o veneno entrar.",b:"Não, é só precaução."},
+            {c:"O Passado",q:"Aceitar ser a 'companhia de luxo' anula minha identidade como homem trabalhador?",a:"Sim. Eu preciso de uma parceira, não de uma patrocinadora cega à minha dor.",b:"Não anula, eu poderia me adaptar."},
+            // Bloco 4 (15-19)
+            {c:"O Passado",q:"Qual é o verdadeiro motivo pelo qual ela não quis discutir as diferenças financeiras?",a:"Porque enfrentar isso exigiria que ela cedesse e mudasse a própria rotina.",b:"Porque não importa para ela."},
+            {c:"O Passado",q:"Quando penso nela, lembro das brigas silenciadas ou só dos bons momentos editados pela memória?",a:"Minha mente edita os bons momentos para aliviar a solidão.",b:"Só existiam coisas boas."},
+            {c:"O Passado",q:"A família dela me respeitava genuinamente pelo que eu construía como professor?",a:"Não. O abismo financeiro sempre gerou julgamentos velados.",b:"Sempre me trataram como um rei."},
+            {c:"O Passado",q:"Se eu disser 'sim' hoje, perco o direito de reclamar das mesmas dores amanhã?",a:"Exatamente. Estarei aceitando o pacote completo da anulação.",b:"Não, posso tentar mudar ela depois."},
+            {c:"O Passado",q:"O que é mais assustador: ficar sozinho agora ou voltar a me sentir sozinho estando ao lado dela?",a:"A solidão a dois é infinitamente pior e mais destrutiva.",b:"Ficar sozinho hoje é o meu maior medo."},
+            // Bloco 5 (20-24)
+            {c:"O Alicerce",q:"Voltar para a casa da minha mãe é o meu fim ou um recuo estratégico para vencer?",a:"Um porto seguro para reorganizar as finanças.",b:"É a prova de que fracassei."},
+            {c:"O Alicerce",q:"Trabalhar honestamente como professor é motivo de orgulho ou de vergonha?",a:"Orgulho. Dinheiro limpo constrói bases sólidas.",b:"Vergonha, deveria estar rico."},
+            {c:"O Alicerce",q:"Comparar minha jornada com a conta bancária dela é justo comigo mesmo?",a:"É cruel e ilógico. Nossas origens são distintas.",b:"É o termômetro do meu sucesso."},
+            {c:"O Alicerce",q:"Estou aceitando 'bater a laje' com calma ou querendo a cobertura amanhã?",a:"Tenho paciência. O tijolo de hoje garante o teto.",b:"Quero resultados mágicos."},
+            {c:"O Alicerce",q:"O que fiz hoje, de prático, para ter um local para chamar de meu?",a:"Trabalhei, organizei contas e mantive o foco.",b:"Apenas lamentei a situação."},
+            // Bloco 6 (25-29)
+            {c:"O Alicerce",q:"A relação falida recente, onde havia outro homem na casa, me diz algo sobre mim?",a:"Diz sobre a bagunça dela. Foi um livramento.",b:"Diz que não sou bom o suficiente."},
+            {c:"O Alicerce",q:"Terminar com essa última pessoa foi um erro ou uma defesa vital?",a:"Defesa vital. Não tenho espaço para confusão.",b:"Deveria ter aceitado para não ficar só."},
+            {c:"O Alicerce",q:"O cansaço físico do meu trabalho é melhor que o esgotamento mental da ex?",a:"Sim. O cansaço físico me deita em paz no travesseiro.",b:"Não, preferia o drama com conforto."},
+            {c:"O Alicerce",q:"Eu preciso provar para os amigos dela que eu sou 'alguém'?",a:"Não devo nada a eles. Meu extrato não é meu crachá.",b:"Sim, preciso mostrar que sou bom."},
+            {c:"O Alicerce",q:"Sou capaz de agradecer hoje pela saúde e força de trabalhar?",a:"Sim, a saúde é o meu maior ativo atual.",b:"Não consigo ver valor no básico."},
+            // Bloco 7 (30-34)
+            {c:"O Alicerce",q:"A casa da minha mãe me acolheu. Estou sendo um hóspede grato ou um filho amargurado?",a:"Estou cultivando a gratidão pelo teto que me protege agora.",b:"Estou apenas descontando minha raiva no ambiente."},
+            {c:"O Alicerce",q:"A pressa de sair de casa pode me fazer aceitar acordos financeiros ruins?",a:"Sim, a pressa é inimiga do alicerce firme. Preciso de estratégia.",b:"Qualquer coisa é melhor que morar aqui."},
+            {c:"O Alicerce",q:"O fato de eu estar construindo minha vida 'tarde' diminui a qualidade da obra?",a:"A vida não é corrida. Construir certo importa mais do que construir rápido.",b:"Sim, já perdi meu tempo útil."},
+            {c:"O Alicerce",q:"Meus colegas de profissão entendem as minhas lutas diárias melhor do que a ex empresária?",a:"Sim, compartilhamos da mesma trincheira e dignidade.",b:"Não, os mundos são iguais."},
+            {c:"O Alicerce",q:"O que significa 'ter muito na vida' para mim hoje?",a:"Ter paz mental, não dever nada a ninguém e ver minha filha sorrir.",b:"Ter dinheiro sobrando para viagens caras."},
+            // Bloco 8 (35-39)
+            {c:"O Alicerce",q:"A minha rotina atual, embora simples, me permite dormir sem medo de cobranças?",a:"A simplicidade me libertou das aparências e me deu sono tranquilo.",b:"A simplicidade me sufoca."},
+            {c:"O Alicerce",q:"Como lidar com o ego ferido após o divórcio e os relacionamentos que não deram certo?",a:"Entendendo que recomeços exigem humildade e que o ego não paga as contas.",b:"Procurando validação rápida no Tinder."},
+            {c:"O Alicerce",q:"Ser provedor de mim mesmo, mesmo que apertado, é o primeiro passo para voltar a liderar minha vida?",a:"Absolutamente. A autonomia financeira básica é o início da recuperação moral.",b:"É o mínimo, não tem mérito."},
+            {c:"O Alicerce",q:"Ao dar aula, percebo o impacto real que tenho no mundo, independente do meu saldo bancário?",a:"Meu impacto através da educação transforma vidas reais. Meu valor é imenso.",b:"Só penso no meu problema financeiro enquanto dou aula."},
+            {c:"O Alicerce",q:"Eu aceito a realidade de hoje como ponto de partida e não como ponto final?",a:"Sim. O mapa está aberto e estou no primeiro quilômetro da nova jornada.",b:"Acho que minha vida já acabou."},
+            // Bloco 9 (40-44)
+            {c:"Paternidade",q:"Se eu aceitar migalhas de afeto, que exemplo de amor-próprio ensino para minha filha de 10 anos?",a:"Ensino que o amor aceita desrespeito. Devo mostrar meus limites.",b:"Ela não vai perceber."},
+            {c:"Paternidade",q:"Minha filha precisa de um pai que ostente restaurantes caros ou psicologicamente forte?",a:"Ela precisa de atenção e meu equilíbrio emocional.",b:"O dinheiro compensa a ausência mental."},
+            {c:"Paternidade",q:"Se eu gastar minha mente remoendo os SMS, quanta energia sobrará para criar memórias com ela?",a:"A ansiedade rouba minha presença. Ela merece atenção plena.",b:"Consigo fazer os dois (mentira)."},
+            {c:"Paternidade",q:"A dignidade com que enfrento essa fase morando com a avó dela será uma lição?",a:"Sim. Ela verá um homem que não desistiu e reconstruiu tudo.",b:"Ela só vai lembrar da casa simples."},
+            {c:"Paternidade",q:"Trazer mulheres confusas (como a recente) para a minha vida afeta a segurança dela?",a:"Afeta totalmente. Meu dever é blindar nosso círculo íntimo.",b:"Meus relacionamentos não a afetam."},
+            // Bloco 10 (45-49)
+            {c:"Paternidade",q:"O sorriso da minha filha hoje me dá mais força do que qualquer validação externa?",a:"É o meu combustível principal. Por ela, não posso ruir.",b:"A validação feminina ainda é maior."},
+            {c:"Paternidade",q:"No dia de hoje, eu escutei minha filha com o celular longe e a mente presente?",a:"Vou me esforçar para que sim. O tempo com ela voa.",b:"Estava distraído com meus lutos."},
+            {c:"Paternidade",q:"Onde reside a segurança que ofereço a ela? No bolso ou nas atitudes?",a:"Nas atitudes. Um pai previsível e honesto transmite paz.",b:"Na conta bancária."},
+            {c:"Paternidade",q:"É ok dizer a ela 'papai não pode comprar isso hoje, mas estamos construindo algo'?",a:"Sim, ensina educação financeira e o valor da conquista.",b:"Não, devo esconder minha realidade."},
+            {c:"Paternidade",q:"Quando ela tiver 20 anos, qual versão do pai ela terá orgulho de contar aos amigos?",a:"Do pai que recomeçou do zero com a cabeça erguida.",b:"Do pai que se anulou por uma mulher rica."},
+            // Bloco 11 (50-54)
+            {c:"Paternidade",q:"Estou usando minha filha como desculpa para não avançar, ou como motivação para lutar?",a:"Ela é meu farol e minha maior motivação de crescimento.",b:"Uso ela de desculpa para ficar na zona de conforto."},
+            {c:"Paternidade",q:"Uma casa luxuosa sem afeto cria uma criança mais feliz que uma casa humilde com diálogo?",a:"O afeto e o limite constroem a mente de uma criança, não o mármore do chão.",b:"O luxo resolve tudo."},
+            {c:"Paternidade",q:"Minha filha capta a minha ansiedade e tristeza quando estou focado no passado?",a:"As crianças são esponjas emocionais. Se estou quebrado, ela sente.",b:"Crianças não percebem essas coisas."},
+            {c:"Paternidade",q:"Qual memória simples construí com ela esta semana que não custou dinheiro?",a:"Uma conversa, um conselho ou um momento de risada genuína.",b:"Nenhuma, só estivemos no mesmo ambiente físico."},
+            {c:"Paternidade",q:"A figura masculina que eu represento hoje é o padrão de homem que eu gostaria que ela namorasse no futuro?",a:"Estou lutando para me tornar exatamente a bússola moral dela.",b:"Me sinto um mau exemplo constante."},
+            // Bloco 12 (55-59)
+            {c:"Paternidade",q:"Minha separação da mãe dela limitou minha capacidade de ser um pai extraordinário?",a:"Não. A dinâmica de casal acabou, mas a paternidade é vitalícia e inegociável.",b:"Sim, me afastei do meu papel."},
+            {c:"Paternidade",q:"Quando sinto vontade de desistir, lembrar do olhar dela me puxa de volta à realidade?",a:"Imediatamente. Eu sou o teto de proteção da vida dela.",b:"Nem sempre é suficiente."},
+            {c:"Paternidade",q:"Eu cobro dela uma maturidade que eu mesmo não estou tendo com minhas emoções?",a:"Preciso ser o adulto da relação e gerir minhas dores primeiro.",b:"Acho que ela tem que me entender também."},
+            {c:"Paternidade",q:"Qual o impacto de não ter levado aquela última mulher desorganizada para conhecer minha filha?",a:"Foi a melhor decisão. Preservei a santidade do universo da minha menina.",b:"Tanto faz, seria só mais uma pessoa."},
+            {c:"Paternidade",q:"Estou preparando minha filha para um mundo de realidades, igual ao mundo em que vivo e dou aulas?",a:"Sim, com princípios fortes baseados em caráter e estudo.",b:"Queria que ela vivesse num conto de fadas."},
+            // Bloco 13 (60-64)
+            {c:"Solitude",q:"Abrir o Tinder hoje por vergonha e receio traria conexão real ou dopamina barata?",a:"Traria ansiedade e interações rasas que me fariam sentir mais vazio.",b:"Resolveria minha falta de afeto."},
+            {c:"Solitude",q:"Sentir falta de um beijo e carinho é fraqueza ou biologia humana normal?",a:"É biologia. Não vou morrer por falta de um beijo; vou sobreviver.",b:"É fraqueza, preciso de alguém urgente."},
+            {c:"Solitude",q:"Procurar relações casuais ou pagas constrói o homem que eu quero ser?",a:"Não. Foge dos meus princípios e aprofunda o vazio no dia seguinte.",b:"Sim, alivia a tensão temporária."},
+            {c:"Solitude",q:"Sou capaz de curtir minha companhia sem precisar de alguém do lado?",a:"Estou aprendendo. A solitude é o escudo contra relações ruins.",b:"Não suporto o silêncio do quarto."},
+            {c:"Solitude",q:"Não ver 'ninguém como paquera' agora é problema ou defesa excelente do meu cérebro?",a:"Defesa excelente. Meu foco total está na reestruturação do meu alicerce.",b:"É um sinal de que ficarei sozinho."},
+            // Bloco 14 (65-69)
+            {c:"Solitude",q:"A vontade de voltar para a ex à noite é saudade do eu verdadeiro ou pânico da solidão?",a:"Pânico da solidão tentando buscar o cobertor mais rápido que conhece.",b:"Sinal cósmico de amor."},
+            {c:"Solitude",q:"Como lidar com a falta de afeto de forma produtiva hoje?",a:"Canalizando a energia frustrada para ler, treinar, trabalhar ou planejar.",b:"Ficando na cama olhando o teto."},
+            {c:"Solitude",q:"A última moça cancelada provou que minha intuição está afiada. Devo confiar nela?",a:"Minha intuição não erra. Se o cenário cheira a confusão, eu recuo.",b:"Não, fui precipitado."},
+            {c:"Solitude",q:"A vergonha de ser professor recomeçando a vida é delírio do ego ou diminui meu valor?",a:"Delírio do ego. Mulheres de alto valor moral respeitam homens trabalhadores.",b:"Ninguém quer quem está recomeçando."},
+            {c:"Solitude",q:"Aprender a ficar sozinho é o superpoder que me impedirá de ser feito de refém no futuro?",a:"Quem não tem medo de ficar sozinho nunca aceita ser tratado como opção.",b:"A solidão só enfraquece."},
+            // Bloco 15 (70-74)
+            {c:"Solitude",q:"Estou tentando substituir um luto amoroso preenchendo a vaga com qualquer pessoa?",a:"Sim, e percebi isso com a última tentativa. Preciso deixar a ferida respirar.",b:"A fila tem que andar rápido."},
+            {c:"Solitude",q:"Se eu entrar num app de namoro focado na minha carência, que tipo de energia atrairei?",a:"Atrairei pessoas igualmente confusas ou oportunistas.",b:"Atrairei a mulher dos meus sonhos."},
+            {c:"Solitude",q:"O que o silêncio do meu quarto me diz quando desligo o celular?",a:"Me força a encarar minhas pendências e a planejar meu amanhã.",b:"Grita os nomes do meu passado."},
+            {c:"Solitude",q:"Não estar apaixonado por ninguém no momento me dá que tipo de liberdade?",a:"A liberdade extrema de focar 100% dos meus recursos físicos e financeiros em mim e na minha filha.",b:"Não sinto como liberdade, sinto como um castigo."},
+            {c:"Solitude",q:"Saber que cheguei à casa da mulher às 21h e vi outro sair mostra que eu escapei de uma armadilha?",a:"Mostra que me safei a tempo e que não devo aceitar meias-verdades.",b:"Mostra que eu perdi uma concorrência."},
+            // Bloco 16 (75-79)
+            {c:"Solitude",q:"A necessidade de atenção feminina pode me fazer desviar das minhas metas financeiras?",a:"Totalmente. A carência muitas vezes drena o tempo e o bolso.",b:"Uma coisa não afeta a outra."},
+            {c:"Solitude",q:"É natural sentir saudade de abraçar um corpo sem ter que resolver problemas?",a:"Muito natural. Reconheço o desejo biológico, mas controlo minhas atitudes.",b:"Se sinto falta, devo ir atrás de qualquer jeito."},
+            {c:"Solitude",q:"Eu confundo carência afetiva com a necessidade de ter os problemas resolvidos por outra pessoa?",a:"Estou aprendendo a separar. Meu conforto emocional deve vir de dentro primeiro.",b:"Eu sempre busco uma salvadora."},
+            {c:"Solitude",q:"Recusar o status da ex foi um voto de celibato ou um voto de confiança em mim mesmo?",a:"Foi um voto de respeito pelo homem que me olho no espelho todos os dias.",b:"Foi um tiro no pé."},
+            {c:"Solitude",q:"O momento atual de solidão é a forja onde a minha melhor versão está sendo criada?",a:"As maiores fortalezas são construídas no silêncio da forja. Eu sairei mais forte.",b:"Estou apenas perdendo tempo de vida."},
+            // Bloco 17 (80-84)
+            {c:"Mente Blindada",q:"Qual hábito simples de hoje (arrumar a cama, beber água) sela meu compromisso com meu crescimento?",a:"Executar o básico com excelência. A disciplina é o cimento do meu futuro.",b:"Os pequenos hábitos não importam."},
+            {c:"Mente Blindada",q:"O 'sentimento bom no corpo e na mente' que sinto às vezes é a prova de que estou no caminho?",a:"É minha consciência agradecendo por finalmente cuidar de mim e dar limite.",b:"É apenas um acaso biológico."},
+            {c:"Mente Blindada",q:"Dizer que 'não vou cumprir e olharei o SMS' é profecia ou permissão oculta que me dou?",a:"É permissão que preciso revogar. Eu controlo meus dedos e meus olhos.",b:"É porque eu sou fraco mesmo."},
+            {c:"Mente Blindada",q:"Se não posso impedir de receber o SMS, posso mudar a forma como reajo?",a:"O SMS chega, mas a decisão de ignorar e focar na minha vida é minha.",b:"Sou vítima da tecnologia."},
+            {c:"Mente Blindada",q:"Eu sou o cara deixado para trás, ou o cara sobrevivente refazendo a história?",a:"Sou o arquiteto da nova história. Mais sábio, mais duro e mais focado.",b:"Sou apenas um cara tentando sobreviver."},
+            // Bloco 18 (85-89)
+            {c:"Mente Blindada",q:"Como a constância da profissão vai garantir o 'meu próprio local'?",a:"Orçamento apertado agora, reserva financeira e planejamento matemático.",b:"Esperando um milagre financeiro."},
+            {c:"Mente Blindada",q:"Posso me perdoar pelas coisas erradas do casamento antigo e usar de aprendizado?",a:"O perdão é obrigatório. Eu não sabia o que sei hoje. Agora é fazer diferente.",b:"Devo carregar essa culpa para sempre."},
+            {c:"Mente Blindada",q:"Quando sinto saudade, é falta do outro ou falta de me sentir bem comigo?",a:"Falta de me sentir bem. Eu sou o único capaz de gerar esse bem-estar.",b:"O outro é a fonte da minha paz."},
+            {c:"Mente Blindada",q:"Um homem de valor é definido pelo que tem na garagem ou por não se curvar a desrespeitos?",a:"Pela postura intransigente frente ao desrespeito. A honra não tem rodas.",b:"Pelos bens materiais."},
+            {c:"Mente Blindada",q:"Eu prometo que, só por hoje, não vou negociar a paz em troca de alívio rápido?",a:"Só por hoje, blindo minha mente. Nada entra sem a minha permissão.",b:"Vou tentar, mas não prometo nada."},
+            // Bloco 19 (90-94)
+            {c:"Mente Blindada",q:"Encarar as contas em dia todo fim de mês deve ser visto como rotina chata ou troféu de honra?",a:"É meu troféu de honra mensal. Significa que sustento minha realidade sem atalhos.",b:"É apenas um fardo que odeio."},
+            {c:"Mente Blindada",q:"Se a ex mandar uma mensagem na noite do meu aniversário, isso muda os últimos 5 meses de descaso?",a:"Uma mensagem oportunista não apaga um histórico de ausência e desrespeito.",b:"Significa que ela mudou totalmente de repente."},
+            {c:"Mente Blindada",q:"A disciplina é o que me segura quando a motivação ou a vontade de chorar aparecem?",a:"Motivação acaba; a disciplina faz o professor levantar da cama e dar sua aula com maestria.",b:"Se eu estou triste, não consigo fazer nada."},
+            {c:"Mente Blindada",q:"Estou usando a leitura, o estudo ou a preparação de aulas como escudo contra pensamentos invasivos?",a:"Ocupar a mente com progresso intelectual é a melhor vacina contra o vazio.",b:"Eu não consigo me concentrar em nada."},
+            {c:"Mente Blindada",q:"Compreendo que a 'falta de vontade de pensar num relacionamento' é o meu cérebro exigindo férias?",a:"Meu sistema nervoso está em manutenção. Respeito essa pausa sem desespero.",b:"Acho que meu cérebro quebrou permanentemente."},
+            // Bloco 20 (95-99)
+            {c:"Mente Blindada",q:"Como lidar com a ansiedade ao ver o tamanho da montanha que tenho que subir para ter minha casa?",a:"Não olho para o topo da montanha. Olho apenas para o próximo degrau diário.",b:"Deito no chão e desisto por ser longe demais."},
+            {c:"Mente Blindada",q:"A clareza que tenho hoje dos meus erros passados me impede de cometer erros novos?",a:"A autocrítica honesta é dolorosa, mas é o que pavimenta uma estrada segura.",b:"Sinto que vou errar sempre."},
+            {c:"Mente Blindada",q:"Apagar a notificação de SMS bloqueado sem ler é um micro-hábito de poder?",a:"Cada vez que faço isso, construo um músculo cerebral de domínio próprio formidável.",b:"É uma micro-tortura diária."},
+            {c:"Mente Blindada",q:"Meus alunos, colegas e filha não precisam saber das minhas batalhas internas para se inspirarem em mim?",a:"Eu lidero pelo exemplo do meu dia a dia. Minha resiliência silenciosa é o meu maior grito.",b:"Preciso que tenham pena da minha situação."},
+            {c:"Mente Blindada",q:"No final desta jornada de reconstrução, quem vai ter mais orgulho do homem no espelho?",a:"Eu mesmo. Terei provado que não precisei me vender, nem desistir de ser pai, para vencer.",b:"Ninguém se importará."}
+        ];
 
-        // Inicializar botões de meses
-        const mList = document.getElementById('month-list');
-        meses.forEach(m => {
-            const btn = document.createElement('button');
-            btn.className = `month-btn ${m === mesAtual ? 'active' : ''}`;
-            btn.innerText = m;
-            btn.onclick = () => switchMonth(m);
-            mList.appendChild(btn);
-        });
+        let prog = JSON.parse(localStorage.getItem('mbProg')) || { c: [] };
+        
+        // Variáveis de execução do Bloco
+        let currentBlockIndex = 0; // de 0 a 19
+        let currentQuestionIdx = 0; // de 0 a 4
+        let selectedOption = null;
 
-        function switchMonth(m) {
-            mesAtual = m;
-            document.querySelectorAll('.month-btn').forEach(b => b.classList.toggle('active', b.innerText === m));
-            updateUI();
+        function id(e) { return document.getElementById(e); }
+
+        function init() {
+            renderBlocks();
+            updStats();
         }
 
-        function openApp(id) {
-            viewAtual = id;
-            document.getElementById('splash').style.display = 'none';
-            document.getElementById('nav-header').style.display = 'block';
-            document.getElementById('btn-back').style.display = 'block';
-            document.querySelectorAll('.container').forEach(c => c.classList.remove('active-view'));
-            document.getElementById('view-' + id).classList.add('active-view');
-            updateUI();
+        function tab(v) {
+            // Se estiver saindo do runner sem terminar, re-renderiza blocos
+            if(v === 'home') renderBlocks();
+            
+            document.querySelectorAll('.view, .nav-item').forEach(e => e.classList.remove('active'));
+            if(id(`view-${v}`)) id(`view-${v}`).classList.add('active');
+            if(id(`nav-${v}`)) id(`nav-${v}`).classList.add('active');
+            window.scrollTo(0, 0);
         }
 
-        function goHome() {
-            document.getElementById('splash').style.display = 'flex';
-            document.getElementById('nav-header').style.display = 'none';
-            document.getElementById('btn-back').style.display = 'none';
-            document.querySelectorAll('.container').forEach(c => c.classList.remove('active-view'));
+        function renderBlocks() {
+            const cont = id('blocks-container');
+            cont.innerHTML = '';
+            
+            for(let i = 0; i < 20; i++) {
+                let doneCount = 0;
+                // Verifica quantas questões das 5 deste bloco já foram feitas
+                for(let j = 0; j < 5; j++) {
+                    let globalIdx = (i * 5) + j;
+                    if(prog.c.includes(globalIdx)) doneCount++;
+                }
+                
+                let isDone = doneCount === 5;
+                let btnClass = isDone ? 'btn-block done' : (doneCount > 0 ? 'btn-block active-block' : 'btn-block');
+                
+                cont.innerHTML += `
+                    <button class="${btnClass}" onclick="startBlock(${i})">
+                        <div class="blk-title">Bloco ${i + 1}</div>
+                        <div class="blk-prog">${isDone ? '✓ Concluído' : doneCount + '/5 Feitas'}</div>
+                    </button>
+                `;
+            }
         }
 
-        function updateUI() {
-            document.getElementById('title-casa').innerText = `${mesAtual} - Casa`;
-            document.getElementById('title-salao').innerText = `${mesAtual} - Salão`;
-            document.getElementById('title-agenda').innerText = `${mesAtual} - Agenda`;
-            renderData();
+        function startBlock(blkIdx) {
+            currentBlockIndex = blkIdx;
+            currentQuestionIdx = 0;
+            tab('runner');
+            showQuestion();
         }
 
-        // LÓGICA DE DADOS (LOCALSTORAGE)
-        function addData(type) {
-            const db = JSON.parse(localStorage.getItem('gestao_master_2026') || '{}');
-            if (!db[mesAtual]) db[mesAtual] = { casa: [], salao: [], agenda: [] };
+        function showQuestion() {
+            let globalIdx = (currentBlockIndex * 5) + currentQuestionIdx;
+            let q = qs[globalIdx];
+            selectedOption = null;
+            
+            id('run-title').innerText = `Bloco ${currentBlockIndex + 1}`;
+            id('run-count').innerText = `${currentQuestionIdx + 1}/5`;
+            id('run-prog').style.width = `${(currentQuestionIdx / 5) * 100}%`;
+            
+            id('btn-next').style.display = 'block';
+            id('btn-next').innerText = 'Confirmar Resposta';
+            id('btn-next').style.opacity = '0.5';
+            id('btn-next').disabled = true;
+            id('btn-finish').style.display = 'none';
 
-            let item = {};
-            if (type === 'casa') {
-                item = { desc: document.getElementById('casa-desc').value, val: document.getElementById('casa-val').value };
-                db[mesAtual].casa.push(item);
-            } else if (type === 'salao') {
-                item = { desc: document.getElementById('salao-desc').value, val: document.getElementById('salao-val').value, tipo: document.getElementById('salao-tipo').value };
-                db[mesAtual].salao.push(item);
-            } else if (type === 'agenda') {
-                item = { in: document.getElementById('ag-in').value, fim: document.getElementById('ag-fim').value, nome: document.getElementById('ag-nome').value, tel: document.getElementById('ag-tel').value, proc: document.getElementById('ag-proc').value, val: document.getElementById('ag-val').value };
-                db[mesAtual].agenda.push(item);
+            let isAlreadyDone = prog.c.includes(globalIdx);
+
+            id('run-container').innerHTML = `
+                <div class="card" style="${isAlreadyDone ? 'border-left: 4px solid var(--s);' : ''}">
+                    <div class="cat-tag">${q.c} (Q#${globalIdx + 1})</div>
+                    ${isAlreadyDone ? '<span style="float:right; font-size: 0.8rem; color: var(--s); font-weight: bold;">✓ Já refletida</span>' : ''}
+                    <div class="q-text">${q.q}</div>
+                    <button class="btn-op" onclick="selectOption(this, ${globalIdx})">${q.a}</button>
+                    <button class="btn-op" onclick="selectOption(this, ${globalIdx})">${q.b}</button>
+                </div>
+            `;
+        }
+
+        function selectOption(el, globalIdx) {
+            document.querySelectorAll('.btn-op').forEach(b => b.classList.remove('sel'));
+            el.classList.add('sel');
+            selectedOption = globalIdx;
+            id('btn-next').style.opacity = '1';
+            id('btn-next').disabled = false;
+        }
+
+        function nextQuestion() {
+            if (selectedOption === null) return;
+            
+            // Salva progresso se for inédita
+            if (!prog.c.includes(selectedOption)) {
+                prog.c.push(selectedOption);
+                localStorage.setItem('mbProg', JSON.stringify(prog));
+                updStats();
             }
 
-            localStorage.setItem('gestao_master_2026', JSON.stringify(db));
-            renderData();
-            document.querySelectorAll('input').forEach(i => i.value = '');
+            currentQuestionIdx++;
+
+            if (currentQuestionIdx < 5) {
+                showQuestion();
+            } else {
+                // Fim do bloco
+                id('run-prog').style.width = '100%';
+                id('run-count').innerText = `5/5`;
+                id('run-container').innerHTML = `
+                    <div class="card" style="text-align: center; border-left: 4px solid var(--s); padding: 30px 15px;">
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">🏆</div>
+                        <h3 style="color: var(--s); margin-bottom: 10px; font-size: 1.2rem;">Bloco ${currentBlockIndex + 1} Concluído</h3>
+                        <p style="font-size: 0.95rem; color: var(--m); line-height: 1.5;">Você cimentou mais 5 tijolos na sua fundação hoje. Mantenha-se firme.</p>
+                    </div>`;
+                id('btn-next').style.display = 'none';
+                id('btn-finish').style.display = 'block';
+            }
         }
 
-        function renderData() {
-            const db = JSON.parse(localStorage.getItem('gestao_master_2026') || '{}');
-            const data = db[mesAtual] || { casa: [], salao: [], agenda: [] };
-
-            document.getElementById('table-casa').innerHTML = data.casa.map((item, i) => `
-                <tr><td>${item.desc}</td><td>R$ ${parseFloat(item.val).toFixed(2)}</td><td><button onclick="del('casa',${i})" style="border:none; background:none; cursor:pointer">❌</button></td></tr>
-            `).join('');
-
-            document.getElementById('table-salao').innerHTML = data.salao.map((item, i) => `
-                <tr><td><small>${item.tipo.toUpperCase()}</small></td><td>${item.desc}</td><td>R$ ${parseFloat(item.val).toFixed(2)}</td><td><button onclick="del('salao',${i})" style="border:none; background:none; cursor:pointer">❌</button></td></tr>
-            `).join('');
-
-            document.getElementById('list-agenda').innerHTML = data.agenda.map((item, i) => `
-                <div class="card card-appointment">
-                    <div class="app-header">
-                        <span class="app-time">${item.in} - ${item.fim}</span>
-                        <span class="app-price">R$ ${parseFloat(item.val).toFixed(2)}</span>
-                    </div>
-                    <div class="app-info">
-                        <b>${item.nome}</b>
-                        <span>📞 ${item.tel}</span> <span>✨ ${item.proc}</span>
-                    </div>
-                    <div class="actions">
-                        <button class="btn-opt btn-edit">Editar</button>
-                        <button class="btn-opt btn-del" onclick="del('agenda',${i})">Excluir</button>
-                        <button class="btn-opt btn-fin" onclick="this.innerText='CONCLUÍDO'; this.style.background='#ccc'">Finalizar</button>
-                    </div>
-                </div>
-            `).join('');
+        function updStats() {
+            id('st-tot').innerText = prog.c.length;
+            id('st-pct').innerText = `${Math.round((prog.c.length / qs.length) * 100)}%`;
         }
 
-        function del(type, index) {
-            const db = JSON.parse(localStorage.getItem('gestao_master_2026'));
-            db[mesAtual][type].splice(index, 1);
-            localStorage.setItem('gestao_master_2026', JSON.stringify(db));
-            renderData();
+        function resetAll() {
+            if(confirm("Tem certeza que deseja recomeçar a sua jornada do zero?")) {
+                prog = { c: [] };
+                localStorage.setItem('mbProg', JSON.stringify(prog));
+                init();
+                tab('home');
+            }
         }
+
+        window.onload = init;
     </script>
 </body>
 </html>
